@@ -1,2 +1,67 @@
-Code for Runge_Kutta_Method
-Replace this with your final MATLAB code.
+% RK4
+
+x1= input("Enter the value of x: ");
+y1= input("Enter the value of y: ");
+xn= input("Enter the value of xn: ");
+h= input("Enter the value of h: ");
+while x1 < xn
+ k1=h*f(x1,y1);
+ k2=h*f(x1+h/2 , y1+(k1)/2);
+ k3=h*f((x1 + h/2) , (y1 + (k2)/2));
+ k4=h*f((x1 + h) , (y1 + k3));
+ y1 = y1+(k1+2*k2+2*k3+k4)/6;
+x1=x1+h;
+end
+ fprintf("\n%f %f",x1,y1)
+function z=f(x,y)
+z=x^2 + y^2;
+end
+% RK4
+% Enter the value of x: 0
+% Enter the value of y: 0
+% Enter the value of xn: 0.2
+% Enter the value of h: 0.2
+%
+% 0.200000 0.002667>>
+% RK4
+% Enter the value of x: 0
+% Enter the value of y: 0
+% Enter the value of xn: 0.4
+% Enter the value of h: 0.2
+%
+% 0.400000 0.021360>>
+
+
+%[x,y]=ode23(f,[0 0.1],1)
+
+%RK2
+
+ function RK2()
+ x1 = input("Enter the value of x1: ");
+ y1 = input("Enter the value of y1: ");
+ xn = input("Enter the value of xn: ");
+ h = input("Enter the value of h: ");
+ fprintf('\n x y\n');
+ fprintf('-----------------------\n');
+ while x1 < xn
+ k1 = h * f(x1, y1);
+ k2 = h * f(x1 + h, y1 + k1);
+ y1 = y1 + (k1 + k2) / 2;
+ x1 = x1 + h;
+ fprintf("%f %f\n", x1, y1);
+ end
+end
+function z = f(x, y)
+ z = (x^2) / (2 * y);
+end
+% RK2
+% Enter the value of x1: 0
+% Enter the value of y1: 1.2
+% Enter the value of xn: 0.4
+% Enter the value of h: 0.4
+%
+% x y
+% -----------------------
+% 0.400000 1.213333
+
+%[x,y]=ode23(f,[0 0.1],1)
