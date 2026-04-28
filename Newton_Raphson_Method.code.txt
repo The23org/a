@@ -1,2 +1,53 @@
-Code for Newton_Raphson_Method
-Replace this with your final MATLAB code.
+% Newton Rapson Method
+
+function Nomlab1NuwtonRapsonMethod()
+x1 = input("Enter assumed value of x1: ");
+accuracy = input("Enter accuracy value: ");
+
+while (f(x1)*ddf(x1))/(df(x1))^2>1
+    x1 = input("Assume x1 again:");
+end
+
+x2 = x1 - f(x1) / df(x1);
+fprintf("\n  x1\t       f(x1)\t      df(x1)\t      x2\t      (x2-x1)");
+
+z= f(x1);
+z1= df(x1);
+z2= abs(x2-x1);
+fprintf("\n%f\t %f\t %f\t %f\t %f", x1, z, z1, x2, z2);
+
+while abs(x2-x1)>accuracy
+    x1=x2;
+    x2 = x1 - f(x1) / df(x1);
+    z= f(x1);
+    z1= df(x1);
+    z2= abs(x2-x1);
+    fprintf("\n%f\t %f\t %f\t %f\t %f", x1, z, z1, x2, z2);
+end
+fprintf("\nRoot of equation is x2=%f",x2);
+end
+
+function y=f(x)
+y=2*x-cos(x)-3;
+end
+
+function y1=df(x)
+y1=2+sin(x);
+end
+
+function y2=ddf(x)
+y2=cos(x);
+end
+
+
+% Enter assumed value of x1: 1
+% Enter accuracy value: 0.001
+% 
+%   x1	      f(x1)	      df(x1)	     x2	      (x2-x1)
+% 1.000000	 -1.540302	 2.841471	 1.542079	 0.542079
+% 1.542079	 0.055445	 2.999588	 1.523595	 0.018484
+% 1.523595	 0.000006	 2.998886	 1.523593	 0.000002
+% Root of equation is x2=1.523593>> 
+
+% f=inline ('2*x-cos(x)-3')
+%root=fzero(f,0)
