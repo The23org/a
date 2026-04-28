@@ -1,2 +1,30 @@
-Code for Euler_Method
-Replace this with your final MATLAB code.
+% Euler
+
+function euler()
+% Input Initial Values %
+x1 = input('Enter the lower limit value x1 = ');
+y1 = input('Enter the lower limit value y1 = ');
+xn = input('Enter the upper limit value xn = ');
+h = input('Enter the steps size h = ');
+% Calculate Number of Steps %
+n = (xn - x1)/h;
+% Apply Euler Formula Iteratively %
+while x1 < xn
+ y1 = y1 + h*f(x1,y1);
+ x1 = x1 + h;
+end
+% Display Output %
+fprintf('\nValue of xn is %0.4f', x1)
+fprintf('\nValue of yn at xn is %0.4f', y1)
+function z = f(x,y)
+z = x + y + x*y;
+% euler
+% Enter the lower limit value x1 = 0
+% Enter the lower limit value y1 = 1
+% Enter the upper limit value xn = 0.1
+% Enter the steps size h = 0.025
+%
+% Value of xn is 0.1000
+% Value of yn at xn is 1.1117>>
+
+%[x,y]=ode23(f,[0 0.1],1)
