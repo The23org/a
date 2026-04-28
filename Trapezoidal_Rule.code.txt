@@ -1,2 +1,22 @@
-Code for Trapezoidal_Rule
-Replace this with your final MATLAB code.
+% Trapezoidal_method
+
+function trapezoidal_method()
+x1=input('Enter lower limit of x1=');
+xn=input('Enter upper limit xn=');
+n=input('Enter number of strips n=');
+h=(xn-x1)/n;
+area=0;
+for i=1:1:n
+    area=area+(h/2)*(f(x1)+f(x1+h));
+    x1=x1+h;
+end
+fprintf('Area=%f',area)
+end
+function y=f(x)
+y=(exp(-x^2))/(1+x);
+end
+
+% Enter lower limit of x1=2
+% Enter upper limit xn=5
+% Enter number of strips n=6
+% Area=0.001818>> 
