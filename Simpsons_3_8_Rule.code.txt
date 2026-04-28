@@ -20,3 +20,6 @@ end
 % Enter upper limit xn=5
 % Enter number of strips n=6
 % Area=0.001601>> 
+
+%f=inline('')
+%Area=quad(f,0,pi)
