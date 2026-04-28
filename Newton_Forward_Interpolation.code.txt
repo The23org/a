@@ -1,2 +1,66 @@
-Code for Newton_Forward_Interpolation
-Replace this with your final MATLAB code.
+% Newtons Forward interpolation
+
+n = input("Enter number of Data point: ");
+
+for i= 1:1:n
+    x(i)= input("Enter value for elemet X: ");
+    y(i)= input("Enter value for elemet Y: ");
+end
+
+h = x(2)-x(1);
+
+xg= input("Enter value of Xg: ");
+
+for j=1:1:n-1
+    for i=1:1:n-j
+
+        if j==1
+            nfd(i,j)=y(i+1)-y(i);
+
+        else 
+            nfd(i,j)=nfd(i+1,j-1)-nfd(i,j-1);
+        end
+    end
+end
+
+yg= y(1);
+
+for j=1:1:n-1
+    term = nfd(1,j);
+    u = (xg - x(1)) / h;
+
+    for k=1:1:j
+        term= term * u/k;
+
+        u=u-1;
+    end
+
+yg=yg+term;
+end
+
+fprintf("%f",yg)
+
+% Output
+% newtonsforwrord_interpolation
+% Enter number of Data point: 7
+% Enter value for elemet X: 3
+% Enter value for elemet Y: 4.8
+% Enter value for elemet X: 4
+% Enter value for elemet Y: 8.4
+% Enter value for elemet X: 5
+% Enter value for elemet Y: 14.5
+% Enter value for elemet X: 6
+% Enter value for elemet Y: 23.6
+% Enter value for elemet X: 7
+% Enter value for elemet Y: 36.2
+% Enter value for elemet X: 8
+% Enter value for elemet Y: 52.8
+% Enter value for elemet X: 9
+% Enter value for elemet Y: 73.9
+% Enter value of Xg: 10
+% 100.000000>>  
+
+
+% x=[5 7 11 13 17];.....
+% y=[150 392 1452 2366 5202];
+% yg=interp1(x,y,8.4,'spline')
