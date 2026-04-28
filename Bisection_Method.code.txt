@@ -1,50 +1,53 @@
-% Newton Rapson Method
+% Bisection Method
 
-function Nomlab1NuwtonRapsonMethod()
-x1 = input("Enter assumed value of x1: ");
-accuracy = input("Enter accuracy value: ");
+function NOMlab1BisectionMethod()
+acc=input('Enter Accuracy: ');
+x1=input('Enter value of x1: ');
+x2 = input('Enter value of x2: ');
 
-while (f(x1)*ddf(x1))/(df(x1))^2>1
-    x1 = input("Assume x1 again:");
+while f(x1)*f(x2)>0
+    x1=input('Enter another value of x1: ');
+    x2 = input('Enter another value of x2: ');
 end
+fprintf('  x1\t\tx2\t\tx3')
 
-x2 = x1 - f(x1) / df(x1);
-fprintf("\n  x1\t       f(x1)\t      df(x1)\t      x2\t      (x2-x1)");
+while abs(x2-x1)>acc
+    x3=(x1+x2)/2;
+    fprintf('\n %f\t %f\t %f', x1, x2, x3)
 
-z= f(x1);
-z1= df(x1);
-z2= abs(x2-x1);
-fprintf("\n%f\t %f\t %f\t %f\t %f", x1, z, z1, x2, z2);
-
-while abs(x2-x1)>accuracy
-    x1=x2;
-    x2 = x1 - f(x1) / df(x1);
-    z= f(x1);
-    z1= df(x1);
-    z2= abs(x2-x1);
-    fprintf("\n%f\t %f\t %f\t %f\t %f", x1, z, z1, x2, z2);
+    if f(x1)*f(x3)<0
+        x2=x3;
+        else
+        x1 = x3;
+    end
 end
-fprintf("\nRoot of equation is x2=%f",x2);
+x3=(x1+x2)/2;
+fprintf('\n Root of equation=%f',x3)
 end
-
 function y=f(x)
-y=2*x-cos(x)-3;
-end
-
-function y1=df(x)
-y1=2+sin(x);
-end
-
-function y2=ddf(x)
-y2=cos(x);
+y= x^3-x-0.1;
 end
 
 
-% Enter assumed value of x1: 1
-% Enter accuracy value: 0.001
-% 
-%   x1	      f(x1)	      df(x1)	     x2	      (x2-x1)
-% 1.000000	 -1.540302	 2.841471	 1.542079	 0.542079
-% 1.542079	 0.055445	 2.999588	 1.523595	 0.018484
-% 1.523595	 0.000006	 2.998886	 1.523593	 0.000002
-% Root of equation is x2=1.523593>> 
+
+
+% Enter Accuracy: 0.001
+% Enter value of x1: 1
+% Enter value of x2: 2
+%
+%
+%   x1	      	x2	    	x3
+%  1.000000	 2.000000	 1.500000
+%  1.000000	 1.500000	 1.250000
+%  1.000000	 1.250000	 1.125000
+%  1.000000	 1.125000	 1.062500
+%  1.000000	 1.062500	 1.031250
+%  1.031250	 1.062500	 1.046875
+%  1.031250	 1.046875	 1.039062
+%  1.039062	 1.046875	 1.042969
+%  1.042969	 1.046875	 1.044922
+%  1.044922	 1.046875	 1.045898
+%  Root of equation=1.046387>> 
+
+% f=inline ('x^3-x-0.1')
+% root=fzero(f,[1,2])
