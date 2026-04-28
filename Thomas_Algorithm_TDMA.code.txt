@@ -1,2 +1,54 @@
-Code for Thomas_Algorithm_TDMA
-Replace this with your final MATLAB code.
+%TDMA 
+
+n=input('Enter number of variable: ');
+for i=1:1:n
+    if i==1
+        a(i)=0;
+        b(i)=input('enter b matrix elements: ');
+        c(i)=input('enter c matrix elements: ');
+    else
+        if i==n
+            a(i)=input('enter a matrix elements: ');
+            b(i)=input('enter b matrix elements: ');
+            c(i)=0;
+        else
+            a(i)=input('enter a matrix elements: ');
+            b(i)=input('enter b matrix elements: ');
+            c(i)=input('enter c matrix elements: ');
+        end
+    end
+d(i)=input('enter d matrix element: ');
+end
+for i=2:1:n
+    m(i)=a(i)/b(i-1);
+    b(i)=b(i)-m(i)*c(i-1);
+    d(i)=d(i)-m(i)*d(i-1);
+end
+x(n)=d(n)/b(n);
+for i = n-1:-1:1
+    x(i) = (d(i) - c(i) * x(i + 1)) / b(i);
+end
+for i=1:1:n
+    fprintf('X(%d)=%f',i,x(i));
+end
+
+% Enter number of variable: 4
+% enter b matrix elements: 2.04
+% enter c matrix elements: -1
+% enter d matrix element: 40.8
+% enter a matrix elements: -1
+% enter b matrix elements: 2.04
+% enter c matrix elements: -1
+% enter d matrix element: 0.8
+% enter a matrix elements: -1
+% enter b matrix elements: 2.04
+% enter c matrix elements: -1
+% enter d matrix element: 0.8
+% enter a matrix elements: -1
+% enter b matrix elements: 2.04
+% enter d matrix element: 200.8
+% X(1)=65.969834X(2)=93.778462X(3)=124.538228X(4)=159.479524>> 
+
+% B=[40.8; 0.8; 0.8; 200.8]
+% A=[2.04 -1 0 0; -1 2.04 -1 0; 0 -1 2.04 -1; 0 0 -1 2.04]
+% X=linsolve(A,B)
