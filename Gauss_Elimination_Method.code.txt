@@ -1,2 +1,140 @@
-Code for Gauss_Elimination_Method
-Replace this with your final MATLAB code.
+% Gauss Elimination Method
+
+n= input("Enter number of variables: ");
+for i= 1:1:n
+    for j= 1:1:n
+      A(i,j)= input("Enter coef. matrix element A(i,j)=");
+    end
+    B(i)=input("Enter constant matrix element B(i)=");
+end
+fprintf("\nMatrix A and B\n")
+A
+B
+for i= 1:1:n-1
+    max= A(i,i);
+    rn=i;
+
+    for k=i+1:1:n
+        if max<A(k,i)
+            max=A(k,i);
+            rn = k;
+        end
+    end
+
+    if rn ~= i 
+        for j= 1:1:n
+            temp= A(i,j);
+            A(i,j) = A(rn,j);
+            A(rn,j) = temp;
+        end
+        temp= B(i);
+        B(i)= B(rn);
+        B(rn)= temp;
+    end
+    fprintf("\nPivoting\n")
+    A
+    B
+
+    for k=i+1:1:n
+        multi = A(k,i)/A(i,i);
+        
+        for j= 1:1:n
+            A(k,j)= A(k,j)-multi*A(i,j);
+        end
+
+        B(k)= B(k)-multi*B(i);
+    end
+end
+fprintf("\nUpper triangular matrix\n")
+A
+B
+for i=n:-1:1
+    sum=B(i);
+    for j=i+1:1:n
+        sum = sum - A(i,j) * x(j);
+    end
+    x(i) = sum / A(i,i);
+end
+for i=1:1:n
+    fprintf("\nx(%d)=%f", i,x(i))
+end
+
+
+
+% Enter number of variables: 3
+% Enter coef. matrix element A(i,j)=1
+% Enter coef. matrix element A(i,j)=10
+% Enter coef. matrix element A(i,j)=-2
+% Enter constant matrix element B(i)=16
+% Enter coef. matrix element A(i,j)=3
+% Enter coef. matrix element A(i,j)=1
+% Enter coef. matrix element A(i,j)=15
+% Enter constant matrix element B(i)=52
+% Enter coef. matrix element A(i,j)=12
+% Enter coef. matrix element A(i,j)=-2
+% Enter coef. matrix element A(i,j)=3
+% Enter constant matrix element B(i)=18
+% 
+% Matrix A and B
+% 
+% A =
+% 
+%      1    10    -2
+%      3     1    15
+%     12    -2     3
+% 
+% 
+% B =
+% 
+%     16    52    18
+% 
+% 
+% Pivoting
+% 
+% A =
+% 
+%     12    -2     3
+%      3     1    15
+%      1    10    -2
+% 
+% 
+% B =
+% 
+%     18    52    16
+% 
+% 
+% Pivoting
+% 
+% A =
+% 
+%    12.0000   -2.0000    3.0000
+%          0   10.1667   -2.2500
+%          0    1.5000   14.2500
+% 
+% 
+% B =
+% 
+%    18.0000   14.5000   47.5000
+% 
+% 
+% Upper triangular matrix
+% 
+% A =
+% 
+%    12.0000   -2.0000    3.0000
+%          0   10.1667   -2.2500
+%          0    0.0000   14.5820
+% 
+% 
+% B =
+% 
+%    18.0000   14.5000   45.3607
+% 
+% 
+% x(1)=1.074761
+% x(2)=2.114671
+% x(3)=3.110736>> 
+
+% B=[16;52;18]
+% A=[1 10 -2; 3 1 15; 12 -2 3]
+% X=linsolve(A,B)
