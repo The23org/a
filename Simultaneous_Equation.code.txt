@@ -1,2 +1,54 @@
-Code for Simultaneous_Equation
-Replace this with your final MATLAB code.
+% Simultaneous equation RK2
+
+function rk2simult()
+
+% Input Initial Values
+x1 = input('Enter the lower limit value x1 = ');
+y1 = input('Enter the lower limit value y1 = ');
+z1 = input('Enter the lower limit value z1 = ');
+xn = input('Enter the upper limit value xn = ');
+h  = input('Enter the step size h = ');
+
+% Apply RK2 method
+while x1 < xn
+    
+    ky1 = h * g(x1, y1, z1);
+    kz1 = h * f(x1, y1, z1);
+    
+    ky2 = h * g(x1 + h, y1 + ky1, z1 + kz1);
+    kz2 = h * f(x1 + h, y1 + ky1, z1 + kz1);
+    
+    ky = (ky1 + ky2) / 2;
+    kz = (kz1 + kz2) / 2;
+    
+    y1 = y1 + ky;
+    z1 = z1 + kz;
+    x1 = x1 + h;
+    
+end
+
+% Display Output
+fprintf('\nApproximate solution at x = %.4f is y = %.4f, z = %.4f\n', x1, y1, z1);
+
+end
+
+% Function defining dz/dx
+function z_dash = f(x,y,z)
+    z_dash = x * y;
+end
+
+% Function defining dy/dx
+function y_dash = g(x,y,z)
+    y_dash = z * y;
+end
+
+%>> rk2simult
+%Enter the lower limit value x1 = 0
+%Enter the lower limit value y1 = 1
+%Enter the lower limit value z1 = 1
+%Enter the upper limit value xn = 0.2
+%Enter the step size h = 0.1
+
+%Approximate solution at x = 0.2000 is y = 1.2224, z = 1.0232
+
+%[x,y]=ode23(f,[0 0.1],1)
