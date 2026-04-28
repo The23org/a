@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATLAB Online Replica - Light Theme</title>
+    <style>
+        /* --- GLOBAL RESETS & FONTS --- */
+        * { box-sizing: border-box; user-select: none; }
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            font-size: 12px;
+            background-color: #ffffff; /* Pure Light Theme */
+            color: #333;
+            overflow: hidden;
+        }
+
+        /* --- SCROLLBAR STYLING --- */
+        ::-webkit-scrollbar { width: 12px; height: 12px; }
+        ::-webkit-scrollbar-track { background: #fafafa; border-left: 1px solid #e0e0e0; }
+        ::-webkit-scrollbar-thumb { background: #cdcdcd; border-radius: 6px; border: 2px solid #fafafa; }
+        ::-webkit-scrollbar-thumb:hover { background: #a6a6a6; }
+
+        .app-container { display: flex; flex-direction: column; height: 100vh; }
+
+        /* --- 1. TOP HEADER & TABS --- */
+        .top-header {
+            background-color: #005a9e; /* MATLAB Blue */
+            display: flex; align-items: flex-end; justify-content: space-between;
+            padding-top: 5px; height: 36px;
+        }
+        .main-tabs { display: flex; padding-left: 5px; height: 100%; }
+        .tab {
+            color: white; padding: 6px 16px; font-size: 11px; text-transform: uppercase;
+            cursor: pointer; display: flex; align-items: center; margin-right: 2px;
+        }
+        .tab:hover:not(.active) { background-color: rgba(255,255,255,0.1); }
+        .tab.active {
+            background-color: #ffffff; color: #005a9e; font-weight: 600;
+            border-top: 3px solid #005a9e; padding-top: 3px; border-radius: 2px 2px 0 0;
+        }
+        
+        .header-right { display: flex; align-items: center; padding-right: 10px; padding-bottom: 4px; gap: 10px;}
+        .search-box {
+            background: #ffffff; border-radius: 2px; padding: 3px 8px; width: 220px;
+            display: flex; justify-content: space-between; align-items: center; color: #666; font-size: 11px;
+        }
+        .header-icons { color: white; display: flex; gap: 12px; font-size: 14px; align-items: center;}
+        .user-profile { display: flex; align-items: center; gap: 5px; color: white; font-size: 11px; margin-left: 10px;}
+
+        /* --- 2. RIBBON --- */
+        .ribbon {
+            background-color: #f5f6f7; height: 85px; border-bottom: 1px solid #c8c8c8;
+            display: flex; padding: 2px 5px; flex-shrink: 0;
+        }
+        .ribbon-group {
+            display: flex; border-right: 1px solid #e0e0e0; padding: 0 10px;
+            position: relative; align-items: flex-start; height: 100%;
+        }
+        .ribbon-group-title {
+            position: absolute; bottom: 2px; left: 0; width: 100%; text-align: center;
+            font-size: 10px; color: #666; text-transform: uppercase;
+        }
+        .ribbon-btn {
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding: 4px 6px; margin: 0 2px; cursor: pointer; border: 1px solid transparent; border-radius: 2px; height: 60px;
+        }
+        .ribbon-btn:hover { background-color: #e5f3ff; border: 1px solid #cce8ff; }
+        .ribbon-btn img { width: 24px; height: 24px; margin-bottom: 4px; }
+        .ribbon-btn span { font-size: 11px; text-align: center; line-height: 1.1; }
+        .ribbon-btn.small { flex-direction: row; height: auto; padding: 2px 4px; }
+        .ribbon-btn.small img { width: 16px; height: 16px; margin-bottom: 0; margin-right: 4px; }
+
+        /* --- 3. ADDRESS BAR --- */
+        .address-bar {
+            background-color: #ffffff; height: 28px; border-bottom: 1px solid #c8c8c8;
+            display: flex; align-items: center; padding: 0 10px; font-size: 12px; color: #444; flex-shrink: 0;
+        }
+        .nav-arrows { display: flex; gap: 10px; color: #005a9e; font-size: 16px; margin-right: 15px; }
+        .nav-arrows span { cursor: pointer; opacity: 0.4; }
+        .nav-arrows span.active { opacity: 1; }
+        .path-items { display: flex; align-items: center; gap: 5px; }
+
+        /* --- 4. MAIN WORKSPACE --- */
+        .workspace { display: flex; flex-grow: 1; overflow: hidden; background-color: #ffffff; }
+
+        /* --- 4A. FILES PANE --- */
+        .files-pane {
+            width: 280px; background-color: #ffffff; border-right: 1px solid #c8c8c8;
+            display: flex; flex-direction: column; flex-shrink: 0;
+        }
+        .pane-header {
+            background-color: #ffffff; padding: 6px 10px; border-bottom: 1px solid #e0e0e0;
+            display: flex; justify-content: space-between; align-items: center; font-size: 12px;
+        }
+        .files-toolbar {
+            display: flex; background: #fdfdfd; border-bottom: 1px solid #e0e0e0; font-size: 12px; font-weight: 600;
+        }
+        .col-name { flex-grow: 1; padding: 4px 10px; border-right: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: space-between; }
+        .col-icon { padding: 4px 10px; border-right: 1px solid #e0e0e0; color: #666; display: flex; justify-content: center; width: 35px;}
+        
+        .file-list { overflow-y: auto; flex-grow: 1; padding-bottom: 10px; }
+        .list-item {
+            display: flex; align-items: center; padding: 3px 5px; cursor: default;
+            position: relative; color: #222;
+        }
+        .list-item:hover { background-color: #e5f3ff; }
+        .list-item.folder { font-weight: 400; }
+        
+        .expand-arrow { width: 12px; font-size: 8px; color: #666; text-align: center; margin-right: 2px;}
+        .file-icon { width: 16px; height: 16px; margin-right: 6px; }
+        .file-name { flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+
+        /* Copy Buttons */
+        .copy-btn {
+            background: transparent; border: none; cursor: pointer; padding: 2px;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.1s, background-color 0.1s, transform 0.1s; 
+            border-radius: 3px; margin: 0 2px;
+        }
+        .list-item:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { background-color: #baddff; }
+        .copy-btn:active { transform: scale(1.3); } /* The "pop" effect */
+        .copy-btn svg { width: 14px; height: 14px; fill: #444; }
+
+        /* --- 4B. EDITOR & COMMAND WINDOW --- */
+        .main-area { display: flex; flex-direction: column; flex-grow: 1; min-width: 0; }
+        
+        /* Editor */
+        .editor-container {
+            flex-grow: 6; background-color: #ffffff; display: flex; flex-direction: column;
+            border-bottom: 1px solid #c8c8c8;
+        }
+        
+        .editor-body { display: flex; flex-grow: 1; overflow: hidden; position: relative; }
+        .line-numbers {
+            width: 40px; background-color: #ffffff; color: #2b91af; text-align: right;
+            padding: 4px 8px; border-right: 1px solid #e0e0e0; font-family: Consolas, monospace; font-size: 13px;
+        }
+        .code-area {
+            flex-grow: 1; padding: 4px 10px; font-family: Consolas, monospace; font-size: 13px;
+            overflow: auto; white-space: pre; outline: none; cursor: text; user-select: text;
+        }
+        .analyzer-bar { width: 16px; background-color: #fdfdfd; border-left: 1px solid #e0e0e0; display: flex; justify-content: center; padding-top: 5px;}
+
+        /* Command Window */
+        .command-window {
+            flex-grow: 4; background-color: #ffffff; display: flex; flex-direction: column;
+        }
+        .cw-header { background-color: #ffffff; padding: 4px 10px; border-bottom: 1px solid #e0e0e0; font-size: 12px; display: flex; justify-content: space-between;}
+        .cw-body {
+            flex-grow: 1; padding: 5px 10px; font-family: Consolas, monospace; font-size: 13px;
+            overflow-y: auto; user-select: text;
+        }
+        .prompt { font-weight: bold; margin-right: 5px; }
+
+        /* --- 5. STATUS BAR --- */
+        .status-bar {
+            height: 24px; background-color: #f5f5f5; border-top: 1px solid #c8c8c8;
+            display: flex; justify-content: space-between; align-items: center; padding: 0 10px;
+            font-size: 11px; color: #555; flex-shrink: 0;
+        }
+
+        /* Toast Popup */
+        #toast {
+            visibility: hidden; min-width: 200px; background-color: #333; color: #fff; text-align: center;
+            border-radius: 4px; padding: 10px; position: fixed; z-index: 1000; left: 50%; bottom: 40px;
+            transform: translateX(-50%); font-size: 13px; opacity: 0; transition: opacity 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        #toast.show { visibility: visible; opacity: 1; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <div class="top-header">
+        <div class="main-tabs">
+            <div class="tab">Home</div>
+            <div class="tab">Plots</div>
+            <div class="tab">Apps</div>
+            <div class="tab active">Editor</div>
+            <div class="tab">Publish</div>
+            <div class="tab">View</div>
+        </div>
+        <div class="header-right">
+            <div class="search-box">Search (Ctrl+Shift+Space) <span>🔍</span></div>
+            <div class="header-icons">
+                <span title="Save">💾</span> <span title="Undo">↩</span> <span title="Redo">↪</span> <span title="Help">❓</span>
+            </div>
+            <div class="user-profile">Adwait <span>▼</span></div>
+        </div>
+    </div>
+
+    <div class="ribbon">
+        <div class="ribbon-group">
+            <div class="ribbon-btn"><img src="https://img.icons8.com/color/48/000000/add-file.png"><span>New</span></div>
+            <div class="ribbon-btn"><img src="https://img.icons8.com/color/48/000000/opened-folder.png"><span>Open</span></div>
+            <div class="ribbon-btn"><img src="https://img.icons8.com/color/48/000000/save.png"><span>Save</span></div>
+            <div style="display:flex; flex-direction:column; justify-content:center;">
+                <div class="ribbon-btn small"><img src="https://img.icons8.com/color/48/compare.png"><span>Compare</span></div>
+            </div>
+            <div class="ribbon-group-title">FILE</div>
+        </div>
+        
+        <div class="ribbon-group">
+            <div class="ribbon-btn"><img src="https://img.icons8.com/color/48/arrow-right.png"><span>Go To</span></div>
+            <div style="display:flex; flex-direction:column; justify-content:center;">
+                <div class="ribbon-btn small"><img src="https://img.icons8.com/ios-filled/50/4a90e2/search--v1.png"><span>Find</span></div>
+                <div class="ribbon-btn small"><img src="https://img.icons8.com/color/48/bookmark-ribbon.png"><span>Bookmark</span></div>
+            </div>
+            <div class="ribbon-group-title">NAVIGATE</div>
+        </div>
+
+        <div class="ribbon-group">
+            <div class="ribbon-btn"><img src="https://img.icons8.com/fluency/48/sparkling.png"><span>Copilot</span></div>
+            <div class="ribbon-btn"><img src="https://img.icons8.com/color/48/refresh.png"><span>Refactor</span></div>
+            <div style="display:flex; flex-direction:column; justify-content:center;">
+                <div class="ribbon-btn small"><img src="https://img.icons8.com/color/48/comment-discussion.png"><span>% %</span></div>
+            </div>
+            <div class="ribbon-group-title">CODE</div>
+        </div>
+
+        <div class="ribbon-group">
+            <div style="display:flex; flex-direction:column; justify-content:center;">
+                <div class="ribbon-btn small"><img src="https://img.icons8.com/color/48/checked-checkbox.png"><span>Code Issues</span></div>
+                <div class="ribbon-btn small"><img src="https://img.icons8.com/color/48/bug.png"><span>Debugger</span></div>
+            </div>
+            <div class="ribbon-group-title">ANALYZE</div>
+        </div>
+
+        <div class="ribbon-group">
+            <div class="ribbon-btn"><img src="https://img.icons8.com/color/48/play.png"><span>Run<br>Section</span></div>
+            <div style="display:flex; flex-direction:column; justify-content:center;">
+                <div class="ribbon-btn small"><img src="https://img.icons8.com/color/48/circled-play.png"><span>Run and Advance</span></div>
+                <div class="ribbon-btn small"><img src="https://img.icons8.com/color/48/end.png"><span>Run to End</span></div>
+            </div>
+            <div class="ribbon-group-title">SECTION</div>
+        </div>
+
+        <div class="ribbon-group">
+            <div class="ribbon-btn"><img src="https://img.icons8.com/color/48/play--v1.png"><span>Run</span></div>
+            <div style="display:flex; flex-direction:column; justify-content:center;">
+                <div class="ribbon-btn small" style="opacity:0.5;"><img src="https://img.icons8.com/ios-filled/50/999999/step-into.png"><span>Step</span></div>
+                <div class="ribbon-btn small" style="opacity:0.5;"><img src="https://img.icons8.com/ios-filled/50/999999/stop.png"><span>Stop</span></div>
+            </div>
+            <div class="ribbon-group-title">RUN</div>
+        </div>
+    </div>
+
+    <div class="address-bar">
+        <div class="nav-arrows">
+            <span class="active">←</span> <span class="active">→</span> <span>↑</span>
+        </div>
+        <div class="path-items">
+            <img src="https://img.icons8.com/color/48/folder-invoices--v1.png" style="width:16px;">
+            <img src="https://img.icons8.com/color/48/cloud.png" style="width:16px; margin-left:10px;">
+            <span style="color:#666; margin:0 5px;">/</span> <span style="font-weight:500;">› MATLAB Drive ›</span>
+        </div>
+    </div>
+
+    <div class="workspace">
+        
+        <div class="files-pane">
+            <div class="pane-header">
+                <div>Files</div>
+                <div style="color: #666; font-weight: bold; cursor: pointer;">⋮</div>
+            </div>
+            <div class="files-toolbar">
+                <div class="col-name">Name <span style="font-size:10px;color:#666;">↑</span></div>
+                <div class="col-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="#666"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg></div>
+                <div class="col-icon" style="border:none;">ⓘ</div>
+            </div>
+            
+            <div class="file-list" id="file-list">
+                <div class="list-item folder"><span class="expand-arrow">▶</span> <img src="https://img.icons8.com/color/48/folder-invoices--v1.png" class="file-icon"> <span class="file-name">Examples</span></div>
+                <div class="list-item folder"><span class="expand-arrow">▶</span> <img src="https://img.icons8.com/color/48/folder-invoices--v1.png" class="file-icon"> <span class="file-name">html</span></div>
+                <div class="list-item folder"><span class="expand-arrow">▶</span> <img src="https://img.icons8.com/color/48/folder-invoices--v1.png" class="file-icon"> <span class="file-name">New folder (2)</span></div>
+                <div class="list-item folder"><span class="expand-arrow">▶</span> <img src="https://img.icons8.com/color/48/folder-invoices--v1.png" class="file-icon"> <span class="file-name">slprj</span></div>
+            </div>
+        </div>
+
+        <div class="main-area">
+            
+            <div class="editor-container">
+                
+                <div class="editor-body">
+                    <div class="line-numbers">1</div>
+                    <div class="code-area">
+<span style="color: #666;"><img src="https://img.icons8.com/fluency/16/sparkling.png" style="vertical-align:middle; margin-right:4px;">Press <b>Ctrl</b> + <b>Shift</b> + <b>P</b> to generate code with Copilot</span>
+                    </div>
+                    <div class="analyzer-bar">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#28a745"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="command-window">
+                <div class="cw-header">
+                    <div>Command Window</div>
+                    <div style="font-weight:bold; color:#666;">⋮</div>
+                </div>
+                <div class="cw-body">
+                    <span class="prompt">>></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="status-bar">
+        <div style="display:flex; align-items:center; gap:5px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#005a9e"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            <span style="font-size:10px;">▼</span>
+            Ready
+        </div>
+        <div style="display:flex; gap:15px;">
+            <span>Editor: 110%</span>
+            <span>UTF-8</span>
+            <span>CRLF</span>
+            <span>Script</span>
+            <span>Ln 1 Col 1</span>
+        </div>
+    </div>
+
+</div>
+
+<div id="toast">Copied to clipboard!</div>
+
+<script>
+    const FILES = [
+        { name: "Bisection_Method.m", infoFile: "copy-data/Bisection_Method.info.txt", codeFile: "copy-data/Bisection_Method.code.txt" },
+        { name: "Newton_Raphson_Method.m", infoFile: "copy-data/Newton_Raphson_Method.info.txt", codeFile: "copy-data/Newton_Raphson_Method.code.txt" },
+        { name: "Gauss_Elimination_Method.m", infoFile: "copy-data/Gauss_Elimination_Method.info.txt", codeFile: "copy-data/Gauss_Elimination_Method.code.txt" },
+        { name: "Thomas_Algorithm_TDMA.m", infoFile: "copy-data/Thomas_Algorithm_TDMA.info.txt", codeFile: "copy-data/Thomas_Algorithm_TDMA.code.txt" },
+        { name: "Gauss_Seidel_Method.m", infoFile: "copy-data/Gauss_Seidel_Method.info.txt", codeFile: "copy-data/Gauss_Seidel_Method.code.txt" },
+        { name: "Trapezoidal_Rule.m", infoFile: "copy-data/Trapezoidal_Rule.info.txt", codeFile: "copy-data/Trapezoidal_Rule.code.txt" },
+        { name: "Simpsons_1_3_Rule.m", infoFile: "copy-data/Simpsons_1_3_Rule.info.txt", codeFile: "copy-data/Simpsons_1_3_Rule.code.txt" },
+        { name: "Simpsons_3_8_Rule.m", infoFile: "copy-data/Simpsons_3_8_Rule.info.txt", codeFile: "copy-data/Simpsons_3_8_Rule.code.txt" },
+        { name: "Straight_Line_Method.m", infoFile: "copy-data/Straight_Line_Method.info.txt", codeFile: "copy-data/Straight_Line_Method.code.txt" },
+        { name: "Quadratic_Equation.m", infoFile: "copy-data/Quadratic_Equation.info.txt", codeFile: "copy-data/Quadratic_Equation.code.txt" },
+        { name: "Power_Curve.m", infoFile: "copy-data/Power_Curve.info.txt", codeFile: "copy-data/Power_Curve.code.txt" },
+        { name: "Lagrangian_Interpolation.m", infoFile: "copy-data/Lagrangian_Interpolation.info.txt", codeFile: "copy-data/Lagrangian_Interpolation.code.txt" },
+        { name: "Newton_Forward_Interpolation.m", infoFile: "copy-data/Newton_Forward_Interpolation.info.txt", codeFile: "copy-data/Newton_Forward_Interpolation.code.txt" },
+        { name: "Euler_Method.m", infoFile: "copy-data/Euler_Method.info.txt", codeFile: "copy-data/Euler_Method.code.txt" },
+        { name: "Runge_Kutta_Method.m", infoFile: "copy-data/Runge_Kutta_Method.info.txt", codeFile: "copy-data/Runge_Kutta_Method.code.txt" },
+        { name: "Simultaneous_Equation.m", infoFile: "copy-data/Simultaneous_Equation.info.txt", codeFile: "copy-data/Simultaneous_Equation.code.txt" },
+        { name: "Laplace_PDG.m", infoFile: "copy-data/Laplace_PDG.info.txt", codeFile: "copy-data/Laplace_PDG.code.txt" }
+    ];
+
+    const COPY_ICON_LEFT = '<svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>';
+    const COPY_ICON_RIGHT = '<svg viewBox="0 0 24 24"><path d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"/></svg>';
+
+    function escapeAttribute(value) {
+        return value.replace(/"/g, "&quot;");
+    }
+
+    function buildFileList() {
+        const fileList = document.getElementById("file-list");
+        const matlabIcon = "https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png";
+
+        FILES.forEach((file) => {
+            const item = document.createElement("div");
+            item.className = "list-item";
+            item.innerHTML = `
+                <span class="expand-arrow"></span>
+                <button class="copy-btn" onclick="copyData(this)" data-source="${escapeAttribute(file.infoFile)}" title="Copy Info">${COPY_ICON_LEFT}</button>
+                <img src="${matlabIcon}" class="file-icon">
+                <span class="file-name">${file.name}</span>
+                <button class="copy-btn" onclick="copyData(this)" data-source="${escapeAttribute(file.codeFile)}" title="Copy Code">${COPY_ICON_RIGHT}</button>
+            `;
+            fileList.appendChild(item);
+        });
+    }
+
+    async function copyData(btn) {
+        const sourcePath = btn.getAttribute("data-source");
+        if (!sourcePath) {
+            showToast("Missing copy source file.");
+            return;
+        }
+
+        let payload = "";
+        try {
+            const response = await fetch(sourcePath, { cache: "no-store" });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            payload = await response.text();
+        } catch (error) {
+            showToast("Could not read text file for copy.");
+            console.error("Fetch failed for", sourcePath, error);
+            return;
+        }
+
+        if (!payload.trim()) {
+            showToast("Text file is empty.");
+            return;
+        }
+
+        showToast("Copied to clipboard!", btn);
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(payload).catch(() => {
+                fallbackCopyText(payload);
+            });
+        } else {
+            fallbackCopyText(payload);
+        }
+    }
+
+    function showToast(message, btn) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.className = "show";
+
+        if (btn) {
+            const originalBg = btn.style.backgroundColor;
+            btn.style.backgroundColor = "#90ee90";
+            setTimeout(() => {
+                btn.style.backgroundColor = originalBg;
+            }, 300);
+        }
+
+        setTimeout(() => {
+            toast.className = toast.className.replace("show", "");
+        }, 1500);
+    }
+
+    // A robust method that works even if you run the file straight from your desktop
+    function fallbackCopyText(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Prevent scrolling to bottom of page in MS Edge.
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            document.execCommand('copy');
+        } catch (err) {
+            console.error('Fallback copy failed', err);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    buildFileList();
+</script>
+
+</body>
+</html>

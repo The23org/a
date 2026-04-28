@@ -1,0 +1,2 @@
+Code for Gauss_Seidel_Method
+Replace this with your final MATLAB code.

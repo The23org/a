@@ -1,0 +1,2 @@
+Code for Simpsons_3_8_Rule
+Replace this with your final MATLAB code.
