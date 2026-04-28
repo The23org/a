@@ -1,2 +1,46 @@
-Code for Lagrangian_Interpolation
-Replace this with your final MATLAB code.
+% Lagrangen interpolation
+
+n = input("Enter number of Data point: ");
+
+for i= 1:1:n
+    x(i)= input("Enter value for elemet X: ");
+    y(i)= input("Enter value for elemet Y: ");
+end
+
+Xg= input("Enter value of Xg: ");
+
+Yg= 0;
+
+for i=1:1:n
+    term= y(i);
+
+    for j=1:1:n
+
+        if j~=i
+            term = term * ((Xg - x(j)) / (x(i) - x(j)));
+        end
+    end
+    Yg = Yg + term;
+end
+
+fprintf("%f",Yg)
+
+% Output
+% Lagrangen_interpolation
+% Enter number of Data point: 5
+% Enter value for elemet X: 5
+% Enter value for elemet Y: 150
+% Enter value for elemet X: 7
+% Enter value for elemet Y: 392
+% Enter value for elemet X: 11
+% Enter value for elemet Y: 1452
+% Enter value for elemet X: 13
+% Enter value for elemet Y: 2366
+% Enter value for elemet X: 17
+% Enter value for elemet Y: 5202
+% Enter value of Xg: 8.4
+% 663.264000>> 
+
+% x=[5 7 11 13 17];
+% y=[150 392 1452 2366 5202];
+% yg=interp1(x,y,8.4,'spline')
