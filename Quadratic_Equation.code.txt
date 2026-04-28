@@ -1,2 +1,64 @@
-Code for Quadratic_Equation
-Replace this with your final MATLAB code.
+% Quadratic_Equation_curveline
+
+n = input("Enter number of Data point: ");
+
+for i= 1:1:n
+    x(i)= input("Enter value for elemet X: ");
+    y(i)= input("Enter value for elemet Y: ");
+end
+
+sx=0;
+sy=0;
+sx2=0;
+sx3=0;
+sx4=0;
+sxy=0;
+sx2y=0;
+
+for i= 1:1:n
+    sx = sx + x(i);
+    sy = sy + y(i);
+    sx2 = sx2 + x(i)*x(i);
+    sx3 = sx3 + x(i)*x(i)*x(i);
+    sx4 = sx4 + x(i)*x(i)*x(i)*x(i);
+    sxy = sxy + x(i)*y(i);
+    sx2y = sx2y + x(i)*x(i)*y(i);
+end
+
+fprintf("\nsx=%f\tsy=%f\tsx2=%f\tsx3=%f\n\tsx4=%f\tsxy=%f\tsx2y=%f",sx,sy,sx2,sx3,sx4,sxy,sx2y)
+
+A = [sx4 sx3 sx2; sx3 sx2 sx; sx2 sx n];
+B = [sx2y; sxy; sy];
+X = linsolve(A,B);
+
+a = X(1);
+b = X(2);
+c = X(3);
+
+fprintf("\ny=%.2f*x^2+%.2f*x+%.2f",a,b,c);
+
+% OUTPUT
+
+% Curveline_degree2
+% Enter number of Data point: 6
+% Enter value for elemet X: 0
+% Enter value for elemet Y: 10
+% Enter value for elemet X: 1
+% Enter value for elemet Y: 21
+% Enter value for elemet X: 2
+% Enter value for elemet Y: 35
+% Enter value for elemet X: 3
+% Enter value for elemet Y: 59
+% Enter value for elemet X: 4
+% Enter value for elemet Y: 92
+% Enter value for elemet X: 5
+% Enter value for elemet Y: 200
+
+% sx=15.000000    sy=417.000000    sx2=55.000000    sx3=225.000000
+
+
+% X=[0 1 2 3 4 5];...................
+% Y=[10 21 35 59 92 200];
+% plot(x,y)
+% plot(log(x),log(y))
+% plot((x),log(y))
