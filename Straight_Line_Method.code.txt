@@ -1,2 +1,44 @@
-Code for Straight_Line_Method
-Replace this with your final MATLAB code.
+% Straight Line
+
+n = input("Enter number of Data point: ");
+
+for i= 1:1:n
+    x(i)= input("Enter value for elemet X: ");
+    y(i)= input("Enter value for elemet Y: ");
+end
+
+sx=0;
+sy=0;
+sxx=0;
+sxy=0;
+
+for i= 1:1:n
+    sx = sx + x(i);
+    sy = sy + y(i);
+    sxx = sxx + x(i)*x(i);
+    sxy = sxy + x(i)*y(i);
+end
+
+fprintf("\nsx=%f\tsy=%f\tsxx=%f\tsxy=%f",sx,sy,sxx,sxy)
+
+a = ((n*sxy)-(sx*sy))/((n*sxx)-(sx)^2);
+b = (sy-(a*sx))/n;
+
+fprintf('\ny=%0.2f*x+%0.2f',a,b)
+
+% Enter number of Data point: 6
+% Enter value for elemet X: 0
+% Enter value for elemet Y: 10
+% Enter value for elemet X: 1
+% Enter value for elemet Y: 21
+% Enter value for elemet X: 2
+% Enter value for elemet Y: 35
+% Enter value for elemet X: 3
+% Enter value for elemet Y: 59
+% Enter value for elemet X: 4
+% Enter value for elemet Y: 92
+% Enter value for elemet X: 5
+% Enter value for elemet Y: 200
+% 
+% sx=15.000000	sy=417.000000	sxx=55.000000	sxy=1636.000000
+% y=33.91*x+-15.29>> 
