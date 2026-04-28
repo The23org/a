@@ -383,15 +383,25 @@
         }
 
         let payload = "";
+        const sourceCandidates = buildSourceCandidates(sourcePath);
         try {
-            const response = await fetch(sourcePath, { cache: "no-store" });
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+            let response = null;
+            for (const url of sourceCandidates) {
+                const currentResponse = await fetch(url, { cache: "no-store" });
+                if (currentResponse.ok) {
+                    response = currentResponse;
+                    break;
+                }
             }
+
+            if (!response) {
+                throw new Error("No candidate path returned HTTP 200");
+            }
+
             payload = await response.text();
         } catch (error) {
             showToast("Could not read text file for copy.");
-            console.error("Fetch failed for", sourcePath, error);
+            console.error("Fetch failed for", sourcePath, "candidates:", sourceCandidates, error);
             return;
         }
 
@@ -427,6 +437,31 @@
         setTimeout(() => {
             toast.className = toast.className.replace("show", "");
         }, 1500);
+    }
+
+    function buildSourceCandidates(relativePath) {
+        const cleanPath = relativePath.replace(/^\.?\//, "");
+        const rootFilePath = cleanPath.replace(/^copy-data\//, "");
+        const url = new URL(window.location.href);
+        const segments = url.pathname.split("/").filter(Boolean);
+        const lastSegment = segments[segments.length - 1] || "";
+        const isFilePath = lastSegment.includes(".");
+        const baseSegments = isFilePath ? segments.slice(0, -1) : segments;
+        const basePath = "/" + (baseSegments.length ? baseSegments.join("/") + "/" : "");
+
+        const sameFolderUrl = `${url.origin}${basePath}${cleanPath}`;
+        const rootUrl = `${url.origin}/${cleanPath}`;
+        const sameFolderRootFileUrl = `${url.origin}${basePath}${rootFilePath}`;
+        const rootFileUrl = `${url.origin}/${rootFilePath}`;
+
+        const unique = [];
+        [sameFolderUrl, rootUrl, sameFolderRootFileUrl, rootFileUrl].forEach((candidate) => {
+            if (!unique.includes(candidate)) {
+                unique.push(candidate);
+            }
+        });
+
+        return unique;
     }
 
     // A robust method that works even if you run the file straight from your desktop
