@@ -27,4 +27,5 @@ z = x + y + x*y;
 % Value of xn is 0.1000
 % Value of yn at xn is 1.1117>>
 
+%f=inline('x + y + x*y')
 %[x,y]=ode23(f,[0 0.1],1)
